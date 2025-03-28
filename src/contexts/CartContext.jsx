@@ -5,11 +5,10 @@ import React, { createContext, useState } from "react";
 export const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  // Состояние, хранящее массив товаров, где каждый товар имеет уникальное сочетание (productId, colorId, sizeId)
+  // Состояние корзины: массив объектов (товаров), каждый уникален (productId, colorId, sizeId)
   const [cartItems, setCartItems] = useState([]);
 
-  // Функция для добавления товара в корзину
-  // Товар добавляется, только если точно такого же (по productId, colorId, sizeId) в корзине еще нет
+  // Добавление товара в корзину (если комбинация уже есть, не добавляем)
   const addToCart = (item) => {
     const exists = cartItems.some(
       (cartItem) =>
@@ -17,13 +16,12 @@ export function CartProvider({ children }) {
         cartItem.colorId === item.colorId &&
         cartItem.sizeId === item.sizeId
     );
-
     if (!exists) {
       setCartItems((prevItems) => [...prevItems, item]);
     }
   };
 
-  // Функция для удаления товара из корзины
+  // Удаление товара из корзины
   const removeFromCart = (itemToRemove) => {
     setCartItems((prevItems) =>
       prevItems.filter(

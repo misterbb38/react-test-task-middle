@@ -4,9 +4,8 @@ import { useParams } from 'react-router-dom'
 import { getProduct, getSizes } from '../services/api'
 import { CartContext } from '../contexts/CartContext'
 
-// Текст et ком en russe
 export default function ProductDetailPage() {
-  // Достаем product id из URL
+  // Достаем id из URL
   const { id } = useParams()
 
   // Состояния
@@ -16,33 +15,30 @@ export default function ProductDetailPage() {
   const [selectedSizeId, setSelectedSizeId] = React.useState(null)
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0)
 
-  // Достаем addToCart из контекста корзины
+  // Подключаемся к контексту корзины
   const { addToCart } = React.useContext(CartContext)
 
-  // Загружаем данные о продукте и о всех размерах
   React.useEffect(() => {
     let isMounted = true
 
-    // Запрашиваем продукт
     getProduct(id)
       .then((data) => {
         if (isMounted) {
           setProduct(data)
         }
       })
-      .catch(() => {
-        // Обработка ошибок (опционально)
+      .catch((error) => {
+        console.error('Ошибка при загрузке товара:', error)
       })
 
-    // Запрашиваем все размеры
     getSizes()
-      .then((sizeData) => {
+      .then((sizesData) => {
         if (isMounted) {
-          setAllSizes(sizeData)
+          setAllSizes(sizesData)
         }
       })
-      .catch(() => {
-        // Обработка ошибок (опционально)
+      .catch((error) => {
+        console.error('Ошибка при загрузке размеров:', error)
       })
 
     return () => {
@@ -50,15 +46,14 @@ export default function ProductDetailPage() {
     }
   }, [id])
 
-  // Если пока нет данных о продукте
   if (!product) {
-    return <div style={{ padding: '1rem' }}>Загрузка...</div>
+    return <div className="loading-container">Загрузка...</div>
   }
 
-  // Получаем текущий цвет
+  // Текущий цвет
   const currentColor = product.colors[selectedColorIndex] || {}
 
-  // Функция переключения предыдущей картинки
+  // Предыдущая картинка
   const handlePrevImage = () => {
     if (!currentColor.images) return
     setCurrentImageIndex((prev) =>
@@ -66,7 +61,7 @@ export default function ProductDetailPage() {
     )
   }
 
-  // Функция переключения следующей картинки
+  // Следующая картинка
   const handleNextImage = () => {
     if (!currentColor.images) return
     setCurrentImageIndex((prev) =>
@@ -74,14 +69,13 @@ export default function ProductDetailPage() {
     )
   }
 
-  // Функция добавления товара в корзину
+  // Добавить в корзину
   const handleAddToCart = () => {
     if (!currentColor?.id || !selectedSizeId) {
-      // В реальном проекте мы могли бы отобразить сообщение об ошибке или alerte
       return
     }
 
-    // Формируем объект для корзины
+    const firstImage = currentColor.images?.[0]
     const itemToAdd = {
       productId: product.id,
       colorId: currentColor.id,
@@ -89,28 +83,27 @@ export default function ProductDetailPage() {
       productName: product.name,
       colorName: currentColor.name,
       price: currentColor.price,
+      image: firstImage,
     }
-
     addToCart(itemToAdd)
   }
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>{product.name}</h2>
+    <div className="detail-page">
+      <h2 className="detail-title">{product.name}</h2>
 
       {/* Блок выбора цвета */}
-      <div style={{ marginBottom: '1rem' }}>
+      <div className="detail-color-choose">
         <h4>Выбрать цвет</h4>
         {product.colors.map((color, index) => (
           <button
+            className={
+              index === selectedColorIndex ? 'color-btn active' : 'color-btn'
+            }
             key={color.id}
             onClick={() => {
               setSelectedColorIndex(index)
-              setCurrentImageIndex(0) // Сбрасываем индексацию картинки при смене цвета
-            }}
-            style={{
-              fontWeight: index === selectedColorIndex ? 'bold' : 'normal',
-              marginRight: '0.5rem',
+              setCurrentImageIndex(0)
             }}
           >
             {color.name}
@@ -119,42 +112,45 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Блок просмотра изображений */}
-      <div style={{ marginBottom: '1rem' }}>
-        <div>
+      <div className="detail-image-block">
+        <div className="detail-image-wrapper">
           {currentColor.images && currentColor.images.length > 0 ? (
             <img
               src={currentColor.images[currentImageIndex]}
               alt={currentColor.name}
-              style={{ maxWidth: 200, display: 'block', marginBottom: '0.5rem' }}
+              className="detail-main-image"
             />
           ) : (
-            <p>Нет изображений для этого цвета</p>
+            <p className="no-image-text">Нет изображений для этого цвета</p>
           )}
         </div>
+
         {currentColor.images && currentColor.images.length > 1 && (
-          <div>
-            <button onClick={handlePrevImage} style={{ marginRight: '0.5rem' }}>
-              Предыдущая
-            </button>
+          <div className="image-buttons">
+            <button onClick={handlePrevImage}>Предыдущая</button>
             <button onClick={handleNextImage}>Следующая</button>
           </div>
         )}
       </div>
 
       {/* Цена и описание */}
-      <p>
-        Цена: <strong>{currentColor.price}</strong>
-      </p>
-      <p>{currentColor.description}</p>
+      <p className="detail-price">Цена: {currentColor.price}</p>
+      <p className="detail-description">{currentColor.description}</p>
 
       {/* Блок выбора размера */}
-      <div style={{ marginBottom: '1rem' }}>
+      <div className="detail-size-choose">
         <h4>Выбрать размер</h4>
         {allSizes.map((size) => {
-          // Проверяем, доступен ли size
           const isAvailable = currentColor.sizes?.includes(size.id)
           return (
             <button
+              className={
+                isAvailable
+                  ? size.id === selectedSizeId
+                    ? 'size-btn active'
+                    : 'size-btn'
+                  : 'size-btn disabled'
+              }
               key={size.id}
               onClick={() => {
                 if (isAvailable) {
@@ -162,11 +158,6 @@ export default function ProductDetailPage() {
                 }
               }}
               disabled={!isAvailable}
-              style={{
-                fontWeight: selectedSizeId === size.id ? 'bold' : 'normal',
-                marginRight: '0.5rem',
-                opacity: isAvailable ? 1 : 0.5,
-              }}
             >
               {size.label}
             </button>
@@ -174,8 +165,9 @@ export default function ProductDetailPage() {
         })}
       </div>
 
-      {/* Кнопка добавления в корзину */}
-      <button onClick={handleAddToCart}>Добавить в корзину</button>
+      <button className="add-to-cart-btn" onClick={handleAddToCart}>
+        Добавить в корзину
+      </button>
     </div>
   )
 }

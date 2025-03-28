@@ -2,38 +2,56 @@
 import React from 'react'
 import { CartContext } from '../contexts/CartContext'
 
-// Текст/ком en russe
 export default function CartPage() {
-  // Достаем cartItems и removeFromCart из контекста
+  // Достаем товары из корзины
   const { cartItems, removeFromCart } = React.useContext(CartContext)
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>Корзина</h2>
+    <div className="cart-page">
+      <h2 className="cart-title">Корзина</h2>
 
       {cartItems.length === 0 ? (
-        <p>Корзина пуста</p>
+        <p className="cart-empty-text">Корзина пуста</p>
       ) : (
-        cartItems.map((item) => (
-          <div
-            key={`${item.productId}-${item.colorId}-${item.sizeId}`}
-            style={{
-              border: '1px solid #ccc',
-              padding: '1rem',
-              marginBottom: '1rem',
-            }}
-          >
-            <p>
-              Товар: {item.productName}
-              <br />
-              Цвет: {item.colorName}
-              <br />
-              Размер: {item.sizeId}
-            </p>
-            <p>Цена: {item.price}</p>
-            <button onClick={() => removeFromCart(item)}>Удалить</button>
-          </div>
-        ))
+        <div className="cart-container">
+          {cartItems.map((item) => (
+            <div
+              className="cart-item"
+              key={`${item.productId}-${item.colorId}-${item.sizeId}`}
+            >
+              {/* Фото товара */}
+              {item.image ? (
+                <img src={item.image} alt={item.colorName} className="cart-item-img" />
+              ) : (
+                <div className="no-photo">Нет фото</div>
+              )}
+
+              {/* Информация о товаре */}
+              <div className="cart-item-info">
+                <p>
+                  <strong>Товар:</strong> {item.productName}
+                </p>
+                <p>
+                  <strong>Цвет:</strong> {item.colorName}
+                </p>
+                <p>
+                  <strong>Размер:</strong> {item.sizeId}
+                </p>
+                <p>
+                  <strong>Цена:</strong> {item.price}
+                </p>
+              </div>
+
+              {/* Кнопка удаления (красная, текст белый) */}
+              <button
+                className="delete-button"
+                onClick={() => removeFromCart(item)}
+              >
+                Удалить
+              </button>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   )

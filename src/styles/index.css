@@ -1,3 +1,7 @@
+/* -----------------------------
+   Стили базовой конфигурации
+----------------------------- */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,46 +11,269 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Можно убрать, если не нужно */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-.App {
-  text-align: center;
+/* -----------------------------
+   Пример стилей для App.js
+----------------------------- */
+
+/* Шапка */
+.app-header {
+  padding: 1rem;
+  background-color: #eee;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Навигационная панель */
+.nav-bar {
   display: flex;
-  flex-direction: column;
+  gap: 1rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #000;
+}
+
+/* Основной контент приложения */
+.app-main {
+  padding: 1rem;
+}
+
+/* -----------------------------
+   Стили для списка продуктов
+   (ProductListPage)
+----------------------------- */
+
+/* Обёртка */
+.product-list-page {
+  padding: 1rem;
+}
+
+/* Заголовок */
+.product-list-title {
+  margin-bottom: 1rem;
+}
+
+/* Контейнер с flex-wrap */
+.product-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Карточка продукта */
+.product-card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  width: 200px; /* Можно min-width, selon besoin */
+  box-sizing: border-box;
+}
+
+/* Ссылка внутри карточки */
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Заголовок карточки */
+.product-card-title {
+  margin: 0 0 0.5rem 0;
+}
+
+/* Картинка продукта */
+.product-image {
+  width: 100%;
+  height: auto;
+}
+
+/* -----------------------------
+   Стили для страницы деталей
+   (ProductDetailPage)
+----------------------------- */
+
+/* Контейнер для détail */
+.detail-page {
+  padding: 1rem;
+}
+
+/* Заголовок */
+.detail-title {
+  margin-bottom: 1rem;
+}
+
+/* Блок выбора цвета */
+.detail-color-choose {
+  margin-bottom: 1rem;
+}
+
+/* Кнопки цвета */
+.color-btn {
+  margin-right: 0.5rem;
+  font-weight: normal;
+}
+
+/* Цвет, если выбран */
+.color-btn.active {
+  font-weight: bold;
+}
+
+/* Блок изображений */
+.detail-image-block {
+  margin-bottom: 1rem;
+}
+
+.detail-image-wrapper {
+  margin-bottom: 0.5rem;
+}
+
+/* Картинка продукта */
+.detail-main-image {
+  max-width: 200px;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Текст, если нет изображения */
+.no-image-text {
+  color: #666;
+}
+
+/* Кнопки переключения изображений */
+.image-buttons button {
+  margin-right: 0.5rem;
+}
+
+/* Цена */
+.detail-price {
+  font-weight: bold;
+}
+
+/* Описание */
+.detail-description {
+  margin-bottom: 1rem;
+}
+
+/* Выбор размера */
+.detail-size-choose {
+  margin-bottom: 1rem;
+}
+
+/* Кнопка выбора размера */
+.size-btn {
+  margin-right: 0.5rem;
+  font-weight: normal;
+  opacity: 1;
+}
+
+/* Если кнопка неактивна */
+.size-btn.disabled {
+  opacity: 0.5;
+}
+
+/* Если размер выбран */
+.size-btn.active {
+  font-weight: bold;
+}
+
+/* Кнопка "Добавить в корзину" */
+.add-to-cart-btn {
+  background-color: #2d87f7;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-to-cart-btn:hover {
+  opacity: 0.8;
+}
+
+/* -----------------------------
+   Стили для страницы корзины
+   (CartPage)
+----------------------------- */
+
+.cart-page {
+  padding: 1rem;
+}
+
+/* Заголовок корзины */
+.cart-title {
+  margin-bottom: 1rem;
+}
+
+.cart-empty-text {
+  margin: 0;
+  color: #666;
+}
+
+/* Контейнер для элементов корзины */
+.cart-container {
+  display: flex;        /* Горизонтальное выравнивание */
+  flex-wrap: wrap;      /* Перенос при нехватке места */
+  gap: 1rem;            /* Расстояние между item */
+}
+
+/* Каждый товар в корзине */
+.cart-item {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  width: 200px;
+  display: flex;
+  flex-direction: column; /* Картинка сверху, информация, bouton */
   align-items: center;
+  box-sizing: border-box;
+}
+
+/* Изображение товара в корзине */
+.cart-item-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+/* Если нет фото */
+.no-photo {
+  width: 100%;
+  height: 120px;
+  background-color: #eee;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Информация о товаре (выровнена влево) */
+.cart-item-info {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+/* Кнопка для удаления товара (красная, текст белый) */
+.delete-button {
+  background-color: red;
   color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.delete-button:hover {
+  opacity: 0.8;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* -----------------------------
+   Прочие стили, если besoin
+----------------------------- */
+
+.loading-container {
+  padding: 1rem;
+  color: #666;
 }
