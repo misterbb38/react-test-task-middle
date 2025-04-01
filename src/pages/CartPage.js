@@ -3,7 +3,6 @@ import React from 'react'
 import { CartContext } from '../contexts/CartContext'
 
 export default function CartPage() {
-  // Достаем товары из корзины
   const { cartItems, removeFromCart } = React.useContext(CartContext)
 
   return (
@@ -19,14 +18,13 @@ export default function CartPage() {
               className="cart-item"
               key={`${item.productId}-${item.colorId}-${item.sizeId}`}
             >
-              {/* Фото товара */}
+              {/* Photo */}
               {item.image ? (
                 <img src={item.image} alt={item.colorName} className="cart-item-img" />
               ) : (
                 <div className="no-photo">Нет фото</div>
               )}
 
-              {/* Информация о товаре */}
               <div className="cart-item-info">
                 <p>
                   <strong>Товар:</strong> {item.productName}
@@ -35,14 +33,13 @@ export default function CartPage() {
                   <strong>Цвет:</strong> {item.colorName}
                 </p>
                 <p>
-                  <strong>Размер:</strong> {item.sizeId}
+                  <strong>Размер:</strong> {item.sizeLabel}
                 </p>
                 <p>
                   <strong>Цена:</strong> {item.price}
                 </p>
               </div>
 
-              {/* Кнопка удаления (красная, текст белый) */}
               <button
                 className="delete-button"
                 onClick={() => removeFromCart(item)}
